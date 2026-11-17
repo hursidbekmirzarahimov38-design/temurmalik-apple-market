@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Temurmalik Apple UZB</title>
+<meta name="description" content="Temurmalikning Apple UZB do'koni: iPhone, MacBook va Apple Watch.">
+<style>
+/* Layout: qora/oq Apple ritmi, bo'limlar navbat bilan almashadi, qurilmalar markazda suzib turadi */
+:root{
+  --black:#000;
+  --ink:#1d1d1f;
+  --paper:#f5f5f7;
+  --white:#fff;
+  --blue:#0071e3;
+  --blue-hi:#2997ff;
+  --gray:#86868b;
+  --gray-lt:#a1a1a6;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --ease:cubic-bezier(.22,.8,.2,1);
+  --nav-h:56px;
+  --gutter:max(20px,env(safe-area-inset-left,0px));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:64px;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--black);color:var(--paper);line-height:1.47;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.locked{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+svg{display:block}
+:focus-visible{outline:3px solid var(--blue-hi);outline-offset:3px;border-radius:8px}
+.svt{font-family:var(--font)}
+.wrap{width:100%;max-width:1180px;margin-inline:auto;padding-left:var(--gutter);padding-right:max(20px,env(safe-area-inset-right,0px))}
+
+/* ---------- Kirish ekrani ---------- */
+#intro{position:fixed;inset:0;z-index:1000;background:#000;display:grid;place-items:center;overflow:hidden;
+  clip-path:circle(150% at 50% 50%);transition:clip-path 1.25s var(--ease) .1s}
+#intro.leaving{clip-path:circle(0% at 50% 66%);pointer-events:none}
+#intro .orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;will-change:transform}
+#intro .o1{width:46vmax;height:46vmax;left:-12vmax;top:-14vmax;background:radial-gradient(circle,#2997ff,transparent 65%);animation:drift1 14s ease-in-out infinite alternate}
+#intro .o2{width:42vmax;height:42vmax;right:-14vmax;top:8vmax;background:radial-gradient(circle,#bf5af2,transparent 65%);animation:drift2 16s ease-in-out infinite alternate}
+#intro .o3{width:40vmax;height:40vmax;left:18vmax;bottom:-22vmax;background:radial-gradient(circle,#ff9f0a,transparent 65%);opacity:.38;animation:drift3 18s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+@keyframes drift2{to{transform:translate(-9vmax,5vmax) scale(.9)}}
+@keyframes drift3{to{transform:translate(6vmax,-8vmax) scale(1.2)}}
+.intro-inner{position:relative;z-index:1;text-align:center;padding:24px;display:flex;flex-direction:column;align-items:center;gap:26px;
+  transition:transform 1s var(--ease),opacity .7s ease,filter .8s ease}
+#intro.leaving .intro-inner{transform:scale(1.4);opacity:0;filter:blur(8px)}
+.intro-logo{width:76px;height:76px;color:#fff;filter:drop-shadow(0 0 22px rgba(255,255,255,.45));
+  opacity:0;transform:scale(.6);animation:logoIn 1.1s var(--ease) .2s forwards}
+@keyframes logoIn{to{opacity:1;transform:none}}
+.intro-title{font-size:clamp(38px,8.4vw,92px);font-weight:700;letter-spacing:-.035em;line-height:1.04}
+.intro-title .ln{display:block;overflow:hidden;padding-bottom:.08em}
+.intro-title .ln>span{display:block;transform:translateY(115%);animation:rise 1.1s var(--ease) forwards}
+.intro-title .ln:nth-child(1)>span{animation-delay:.55s}
+.intro-title .ln:nth-child(2)>span{animation-delay:.72s}
+.intro-title .ln:nth-child(3)>span{animation-delay:.9s}
+@keyframes rise{to{transform:none}}
+.grad{background:linear-gradient(90deg,#2997ff 0%,#bf5af2 48%,#ff9f0a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.intro-sub{font-size:clamp(14px,1.8vw,18px);color:var(--gray-lt);letter-spacing:.02em;opacity:0;animation:fade 1s ease 1.35s forwards}
+@keyframes fade{to{opacity:1}}
+.enter-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#000;font-weight:600;font-size:17px;padding:15px 34px;border-radius:980px;
+  opacity:0;transform:translateY(14px);animation:btnIn .9s var(--ease) 1.6s forwards;transition:transform .35s var(--ease),box-shadow .35s ease,background .3s}
+@keyframes btnIn{to{opacity:1;transform:none}}
+.enter-btn svg{width:18px;height:18px;transition:transform .35s var(--ease)}
+.enter-btn:hover{transform:scale(1.06);box-shadow:0 0 0 6px rgba(255,255,255,.16),0 18px 50px rgba(41,151,255,.45)}
+.enter-btn:hover svg{transform:translateX(5px)}
+.enter-btn:active{transform:scale(.98)}
+
+/* ---------- Navbar ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);background:rgba(22,22,23,.72);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);
+  border-bottom:1px solid rgba(255,255,255,.08);padding-top:env(safe-area-inset-top,0px);box-sizing:content-box}
+.nav-in{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:17px;letter-spacing:-.01em;white-space:nowrap;border-radius:10px;padding:6px 8px;margin-left:-8px;transition:background .3s}
+.brand:hover{background:rgba(255,255,255,.1)}
+.brand svg{width:20px;height:20px;color:#fff;transition:transform .5s var(--ease)}
+.brand:hover svg{transform:rotate(-12deg) scale(1.12)}
+.brand small{font-weight:400;color:var(--gray-lt);font-size:15px}
+.links{display:flex;align-items:center;gap:2px}
+.links a{position:relative;padding:8px 14px;border-radius:980px;font-size:14px;color:rgba(245,245,247,.78);transition:background .3s,color .3s,transform .3s var(--ease)}
+.links a:hover{background:rgba(255,255,255,.12);color:#fff;transform:translateY(-1px)}
+.links a.active{color:#fff}
+.links a.active::after{content:"";position:absolute;left:50%;bottom:2px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--blue-hi)}
+.nav-right{display:flex;align-items:center;gap:8px}
+.call-pill{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;font-size:14px;font-weight:500;padding:8px 16px;border-radius:980px;white-space:nowrap;
+  transition:background .3s,transform .3s var(--ease),box-shadow .3s}
+.call-pill svg{width:15px;height:15px}
+.call-pill:hover{background:#0a84ff;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,113,227,.5)}
+.burger{display:none;width:40px;height:40px;border-radius:50%;place-items:center;transition:background .3s}
+.burger:hover{background:rgba(255,255,255,.12)}
+.burger i{display:block;width:18px;height:1.5px;background:#fff;border-radius:2px;margin:4px auto;transition:transform .4s var(--ease),opacity .3s}
+.nav.open .burger i:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.nav.open .burger i:nth-child(2){opacity:0}
+.nav.open .burger i:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+
+/* ---------- Umumiy bo'lim ---------- */
+.sec{position:relative;padding-block:clamp(72px,11vw,130px)}
+.sec.light{--card:#fff;--fg:var(--ink);--muted:var(--gray);--hl:rgba(0,113,227,.09);background:var(--paper);color:var(--ink)}
+.sec.dark{--card:#161617;--fg:var(--paper);--muted:var(--gray-lt);--hl:rgba(255,255,255,.1);background:var(--black);color:var(--paper)}
+.sec-head{text-align:center;max-width:760px;margin:0 auto clamp(40px,6vw,72px)}
+.eyebrow{display:inline-block;font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-hi);margin-bottom:14px}
+.sec.light .eyebrow{color:var(--blue)}
+.sec h2{font-size:clamp(36px,6.2vw,68px);font-weight:700;letter-spacing:-.03em;line-height:1.06;text-wrap:balance}
+.sec-head p{margin-top:18px;font-size:clamp(17px,2vw,21px);color:var(--muted);text-wrap:balance}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;padding-top:calc(var(--nav-h) + 72px);padding-bottom:40px;text-align:center;overflow:hidden;
+  background:radial-gradient(70% 55% at 50% 0%,rgba(41,151,255,.28),transparent 70%),radial-gradient(50% 40% at 85% 30%,rgba(191,90,242,.2),transparent 70%),#000}
+.hero .eyebrow{opacity:0;transform:translateY(16px)}
+.hero h1{font-size:clamp(44px,9vw,104px);font-weight:700;letter-spacing:-.04em;line-height:1.02;text-wrap:balance;opacity:0;transform:translateY(24px)}
+.hero .lead{margin:22px auto 0;max-width:620px;font-size:clamp(18px,2.2vw,24px);color:var(--gray-lt);text-wrap:balance;opacity:0;transform:translateY(20px)}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:34px;opacity:0;transform:translateY(20px)}
+body.entered .hero .eyebrow,body.entered .hero h1,body.entered .hero .lead,body.entered .cta-row{opacity:1;transform:none;transition:opacity 1s ease,transform 1.1s var(--ease)}
+body.entered .hero h1{transition-delay:.12s}
+body.entered .hero .lead{transition-delay:.26s}
+body.entered .cta-row{transition-delay:.4s}
+.btn{display:inline-flex;align-items:center;gap:10px;font-size:17px;font-weight:500;padding:13px 28px;border-radius:980px;transition:background .3s,color .3s,transform .35s var(--ease),box-shadow .35s,border-color .3s}
+.btn svg{width:16px;height:16px;transition:transform .35s var(--ease)}
+.btn.primary{background:var(--blue);color:#fff}
+.btn.primary:hover{background:#0a84ff;transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,113,227,.5)}
+.btn.ghost{border:1.5px solid var(--blue-hi);color:var(--blue-hi)}
+.btn.ghost:hover{background:var(--blue-hi);color:#000;transform:translateY(-2px)}
+.btn.ghost:hover svg,.btn.primary:hover svg{transform:translateX(4px)}
+.sec.light .btn.ghost{border-color:var(--blue);color:var(--blue)}
+.sec.light .btn.ghost:hover{background:var(--blue);color:#fff}
+.stage{position:relative;max-width:1100px;margin:clamp(40px,6vw,80px) auto 0;aspect-ratio:16/8.6;opacity:0;transform:translateY(60px) scale(.96)}
+body.entered .stage{opacity:1;transform:none;transition:opacity 1.3s ease .5s,transform 1.5s var(--ease) .5s}
+.stage>svg{position:absolute;filter:drop-shadow(0 40px 50px rgba(0,0,0,.55));height:auto}
+.stage .s-mac{width:66%;left:17%;top:0;animation:float 9s ease-in-out infinite}
+.stage .s-phone{width:17.5%;right:3%;bottom:-3%;animation:float 7s ease-in-out -2s infinite}
+.stage .s-watch{width:12.5%;left:4%;bottom:-1%;animation:float 8s ease-in-out -4s infinite}
+@keyframes float{50%{transform:translateY(-14px)}}
+
+/* ---------- Mahsulot kartalari ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:20px}
+.card{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--card);color:var(--fg);border-radius:30px;padding:30px 24px 26px;overflow:hidden;isolation:isolate;
+  transition:transform .55s var(--ease),box-shadow .55s var(--ease)}
+.card::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),var(--hl),transparent 62%);opacity:0;transition:opacity .45s}
+.card:hover{transform:translateY(-10px)}
+.card:hover::after{opacity:1}
+.sec.light .card{box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.sec.light .card:hover{box-shadow:0 30px 60px rgba(0,0,0,.16)}
+.sec.dark .card{box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.sec.dark .card:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 30px 70px rgba(0,0,0,.7)}
+.badge{position:absolute;top:18px;left:18px;font-size:12px;font-weight:600;letter-spacing:.04em;padding:5px 12px;border-radius:980px;background:linear-gradient(90deg,#ff9f0a,#ff375f);color:#fff}
+.art{position:relative;width:100%;height:clamp(250px,32vw,330px);display:grid;place-items:center;margin-bottom:22px;
+  transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(var(--s,1));transition:transform .5s var(--ease)}
+.art::before{content:"";position:absolute;inset:6% 4%;background:radial-gradient(closest-side,var(--glow,rgba(41,151,255,.6)),transparent 72%);filter:blur(14px);opacity:.42;transition:opacity .5s}
+.card:hover .art{--s:1.06}
+.card:hover .art::before{opacity:.8}
+.art svg{position:relative;max-height:100%;max-width:100%;height:100%;width:auto;filter:drop-shadow(0 22px 26px rgba(0,0,0,.28))}
+.card h3{font-size:clamp(24px,2.6vw,30px);font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.card p{margin-top:8px;color:var(--muted);font-size:17px}
+.link{display:inline-flex;align-items:center;gap:4px;margin-top:18px;color:var(--blue);font-size:17px;font-weight:500;transition:gap .3s var(--ease),color .3s}
+.sec.dark .link{color:var(--blue-hi)}
+.link span{transition:transform .3s var(--ease)}
+.link:hover{text-decoration:underline}
+.link:hover span{transform:translateX(5px)}
+.more-row{display:flex;justify-content:center;margin-top:clamp(36px,5vw,56px)}
+
+/* ---------- Yopiladigan "Hammasini ko'rish" oynasi ---------- */
+.sheet{position:fixed;inset:0;z-index:900;background:rgba(245,245,247,.97);-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);color:var(--ink);
+  --card:#fff;--fg:var(--ink);--muted:var(--gray);--hl:rgba(0,113,227,.09);
+  transform:translateY(100%);visibility:hidden;transition:transform .75s var(--ease),visibility 0s .75s;overflow-y:auto;overscroll-behavior:contain}
+.sheet.open{transform:none;visibility:visible;transition:transform .75s var(--ease)}
+.sheet-bar{position:sticky;top:0;z-index:2;background:rgba(245,245,247,.85);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.08);padding-top:env(safe-area-inset-top,0px)}
+.sheet-bar .wrap{display:flex;align-items:center;justify-content:space-between;min-height:64px;gap:12px}
+.sheet-bar h3{font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:-.02em}
+.close{width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.07);display:grid;place-items:center;transition:background .3s,transform .4s var(--ease);flex:none}
+.close svg{width:16px;height:16px}
+.close:hover{background:rgba(0,0,0,.14);transform:rotate(90deg)}
+.sheet .grid{padding-block:40px 80px}
+.sheet .card{background:#fff}
+.sheet-in .card{opacity:0;transform:translateY(40px)}
+.sheet.open .card{opacity:1;transform:none;transition:opacity .7s ease,transform .8s var(--ease),box-shadow .55s var(--ease)}
+.sheet.open .card:hover{transform:translateY(-10px)}
+.sheet.open .card:nth-child(1){transition-delay:.2s,.2s,0s}
+.sheet.open .card:nth-child(2){transition-delay:.28s,.28s,0s}
+.sheet.open .card:nth-child(3){transition-delay:.36s,.36s,0s}
+.sheet.open .card:nth-child(4){transition-delay:.44s,.44s,0s}
+.sheet.open .card:nth-child(5){transition-delay:.52s,.52s,0s}
+.sheet.open .card:nth-child(6){transition-delay:.6s,.6s,0s}
+.sheet.open .card:hover{transition-delay:0s}
+
+/* ---------- Ma'lumotlar ---------- */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:20px}
+.info{background:#fff;border-radius:28px;padding:30px 26px;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.info:hover{transform:translateY(-8px);box-shadow:0 26px 56px rgba(0,0,0,.14)}
+.ico{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#2997ff,#5e5ce6);color:#fff;margin-bottom:20px;transition:transform .5s var(--ease)}
+.info:hover .ico{transform:rotate(-8deg) scale(1.1)}
+.ico svg{width:26px;height:26px}
+.info:nth-child(2) .ico{background:linear-gradient(135deg,#30d158,#0a9d6b)}
+.info:nth-child(3) .ico{background:linear-gradient(135deg,#ff9f0a,#ff375f)}
+.info:nth-child(4) .ico{background:linear-gradient(135deg,#bf5af2,#5e5ce6)}
+.info h3{font-size:21px;font-weight:600;letter-spacing:-.015em}
+.info p{margin-top:8px;color:var(--gray);font-size:16px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:20px;margin-top:clamp(40px,6vw,64px)}
+.step{padding:26px 8px 0;border-top:2px solid rgba(0,0,0,.12);transition:border-color .4s}
+.step:hover{border-color:var(--blue)}
+.step b{display:block;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.step span{font-size:21px;font-weight:600;letter-spacing:-.015em;line-height:1.25}
+.steps-title{margin-top:clamp(56px,8vw,96px);text-align:center;font-size:clamp(26px,3.6vw,38px);font-weight:700;letter-spacing:-.025em;color:var(--ink)}
+
+/* ---------- Bog'lanish ---------- */
+.contact{position:relative;overflow:hidden;border-radius:36px;padding:clamp(40px,7vw,88px) clamp(24px,5vw,64px);text-align:center;background:#0b0b0d;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.contact::before,.contact::after{content:"";position:absolute;border-radius:50%;filter:blur(80px);z-index:0}
+.contact::before{width:420px;height:420px;left:-120px;top:-140px;background:#0a84ff;opacity:.4;animation:drift1 12s ease-in-out infinite alternate}
+.contact::after{width:380px;height:380px;right:-120px;bottom:-140px;background:#bf5af2;opacity:.34;animation:drift2 14s ease-in-out infinite alternate}
+.contact>*{position:relative;z-index:1}
+.owner{display:inline-flex;align-items:center;gap:12px;padding:8px 18px 8px 8px;border-radius:980px;background:rgba(255,255,255,.08);font-size:16px;margin-bottom:26px;transition:background .3s}
+.owner:hover{background:rgba(255,255,255,.14)}
+.owner i{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2997ff,#bf5af2);display:grid;place-items:center;font-style:normal;font-weight:700}
+.contact h2{font-size:clamp(32px,5.4vw,60px)}
+.contact .lead{margin:16px auto 0;max-width:560px;font-size:clamp(17px,2vw,21px);color:var(--gray-lt);text-wrap:balance}
+.phone-big{display:inline-block;margin-top:30px;font-size:clamp(34px,7.4vw,76px);font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.1;transition:transform .45s var(--ease),filter .45s}
+.phone-big:hover{transform:scale(1.04);filter:drop-shadow(0 0 30px rgba(41,151,255,.6))}
+.contact .cta-row{opacity:1;transform:none;margin-top:34px}
+
+/* ---------- Footer ---------- */
+.foot{background:var(--paper);color:var(--gray);font-size:13px;padding-block:28px calc(28px + env(safe-area-inset-bottom,0px));border-top:1px solid rgba(0,0,0,.08)}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between;align-items:center}
+.foot b{color:var(--ink);font-weight:600}
+.foot p{max-width:640px;line-height:1.5}
+
+/* ---------- Suzuvchi qo'ng'iroq tugmasi va xabar ---------- */
+.fab{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:480;width:56px;height:56px;border-radius:50%;background:var(--blue);color:#fff;display:none;place-items:center;
+  box-shadow:0 12px 30px rgba(0,113,227,.55);transition:transform .35s var(--ease)}
+.fab svg{width:24px;height:24px}
+.fab:hover{transform:scale(1.1)}
+.toast{position:fixed;left:50%;bottom:max(28px,env(safe-area-inset-bottom,0px));z-index:2000;transform:translate(-50%,30px);opacity:0;pointer-events:none;background:rgba(29,29,31,.95);color:#fff;padding:12px 22px;border-radius:980px;font-size:15px;
+  transition:opacity .35s,transform .5s var(--ease);box-shadow:0 14px 40px rgba(0,0,0,.4)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Skroll animatsiyasi ---------- */
+.js .reveal{opacity:0;transform:translateY(46px);transition:opacity .9s ease,transform 1s var(--ease)}
+.js .reveal.in{opacity:1;transform:none}
+.js .reveal.d1{transition-delay:.1s}
+.js .reveal.d2{transition-delay:.2s}
+.js .reveal.d3{transition-delay:.3s}
+
+/* ---------- Mobil ---------- */
+@media (max-width:960px){
+  .burger{display:grid}
+  .links{position:fixed;top:calc(var(--nav-h) + env(safe-area-inset-top,0px));left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:rgba(22,22,23,.97);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);
+    padding:10px var(--gutter) 20px;max-height:0;overflow:hidden;opacity:0;visibility:hidden;transition:max-height .6s var(--ease),opacity .4s,visibility 0s .6s;border-bottom:1px solid rgba(255,255,255,.08)}
+  .nav.open .links{max-height:420px;opacity:1;visibility:visible;transition:max-height .6s var(--ease),opacity .4s}
+  .links a{padding:15px 10px;font-size:22px;font-weight:600;border-radius:12px;color:#f5f5f7}
+  .links a.active::after{display:none}
+  .brand small{display:none}
+}
+@media (max-width:640px){
+  .call-pill span{display:none}
+  .call-pill{padding:9px 11px}
+  .call-pill svg{width:17px;height:17px}
+  .fab{display:grid}
+  .hero{padding-top:calc(var(--nav-h) + 48px)}
+  .stage{aspect-ratio:4/3.6}
+  .stage .s-mac{width:92%;left:4%}
+  .stage .s-phone{width:26%;right:0;bottom:-2%}
+  .stage .s-watch{width:19%;left:0;bottom:2%}
+  .card{border-radius:26px}
+  .sheet .grid{padding-block:28px 60px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body class="locked">
+
+<!-- ======= KIRISH EKRANI ======= -->
+<div id="intro" role="dialog" aria-label="Xush kelibsiz">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+  <div class="intro-inner">
+    <svg class="intro-logo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path class="apple-d"/></svg>
+    <h1 class="intro-title">
+      <span class="ln"><span>Temurmalikning</span></span>
+      <span class="ln"><span>Apple UZB do'koniga</span></span>
+      <span class="ln"><span class="grad">xush kelibsiz</span></span>
+    </h1>
+    <p class="intro-sub">iPhone &nbsp;·&nbsp; MacBook &nbsp;·&nbsp; Apple Watch</p>
+    <button class="enter-btn" id="enterBtn" type="button">Kirish
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ======= NAVBAR ======= -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#bosh" aria-label="Temurmalik Apple UZB — bosh sahifa">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path class="apple-d"/></svg>
+      <span>Temurmalik <small>Apple UZB</small></span>
+    </a>
+    <nav class="links" id="links" aria-label="Asosiy menyu">
+      <a href="#telefonlar">Telefonlar</a>
+      <a href="#kompyuterlar">Kompyuterlar</a>
+      <a href="#watch">Apple Watch</a>
+      <a href="#malumotlar">Ma'lumotlar</a>
+      <a href="#boglanish">Bog'lanish</a>
+    </nav>
+    <div class="nav-right">
+      <a class="call-pill" href="tel:+998772675584" aria-label="Qo'ng'iroq qilish">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+        <span>Qo'ng'iroq</span>
+      </a>
+      <button class="burger" id="burger" type="button" aria-label="Menyuni ochish" aria-expanded="false" aria-controls="links"><i></i><i></i><i></i></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ======= HERO ======= -->
+  <section class="hero" id="bosh">
+    <div class="wrap">
+      <span class="eyebrow">Temurmalik · Apple UZB</span>
+      <h1>Apple texnikasi.<br><span class="grad">Bir joyda.</span></h1>
+      <p class="lead">iPhone, MacBook va Apple Watch. O'zingizga mosini tanlang va do'kon egasi bilan to'g'ridan-to'g'ri gaplashing.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#telefonlar">Telefonlarni ko'rish
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn ghost" href="tel:+998772675584">Qo'ng'iroq qilish</a>
+      </div>
+      <div class="stage" id="stage" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- ======= TELEFONLAR ======= -->
+  <section class="sec light" id="telefonlar">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Telefonlar</span>
+        <h2>iPhone.<br>Sizga mos avlod.</h2>
+        <p>Eng yangi iPhone modellari. Boshqa modellarni ko'rish uchun pastdagi tugmani bosing.</p>
+      </div>
+      <div class="grid" id="grid-phones"></div>
+      <div class="more-row reveal"><button class="btn ghost" type="button" data-open="phones">Hammasini ko'rish
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    </div>
+  </section>
+
+  <!-- ======= KOMPYUTERLAR ======= -->
+  <section class="sec dark" id="kompyuterlar">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Kompyuterlar</span>
+        <h2>MacBook.<br>Ish ham, ijod ham.</h2>
+        <p>Ish va o'qish uchun noutbuklar. Boshqa Mac modellari ham bor.</p>
+      </div>
+      <div class="grid" id="grid-macs"></div>
+      <div class="more-row reveal"><button class="btn ghost" type="button" data-open="macs">Hammasini ko'rish
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    </div>
+  </section>
+
+  <!-- ======= APPLE WATCH ======= -->
+  <section class="sec light" id="watch">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Apple Watch</span>
+        <h2>Bilagingizdagi<br>eng yaqin yordamchi.</h2>
+        <p>Sport, salomatlik va kundalik ishlar uchun soatlar. Boshqa modellarni ko'rish uchun tugmani bosing.</p>
+      </div>
+      <div class="grid" id="grid-watches"></div>
+      <div class="more-row reveal"><button class="btn ghost" type="button" data-open="watches">Hammasini ko'rish
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    </div>
+  </section>
+
+  <!-- ======= MA'LUMOTLAR ======= -->
+  <section class="sec light" id="malumotlar" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Ma'lumotlar</span>
+        <h2>Do'kon haqida.</h2>
+        <p>Temurmalikning Apple UZB do'koni iPhone, MacBook va Apple Watch tanlayotganlar uchun. Kerakli modelni topishda yordam beramiz.</p>
+      </div>
+      <div class="info-grid">
+        <div class="info reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 2 3.1-.2.9 3 2.6 1.7-1 2.9 1 2.9-2.6 1.7-.9 3-3.1-.2L12 21l-2.4-2-3.1.2-.9-3-2.6-1.7 1-2.9-1-2.9 2.6-1.7.9-3 3.1.2z"/><path d="M8.5 12.2l2.4 2.4 4.6-4.9"/></svg></div>
+          <h3>Original texnika</h3>
+          <p>Apple mahsulotlari: iPhone, MacBook va Apple Watch.</p>
+        </div>
+        <div class="info reveal d1">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.6-3.2 8-8 9-4.8-1-8-4.4-8-9V6z"/><path d="M8.6 12l2.4 2.4 4.4-4.8"/></svg></div>
+          <h3>Kafolat va xizmat</h3>
+          <p>Xaridingizdan keyin ham savollaringizga javob beramiz.</p>
+        </div>
+        <div class="info reveal d2">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.7 7.1L4 20.5l1.4-4.7A8 8 0 1 1 21 12z"/><path d="M8.5 11h7M8.5 14.2h4.5"/></svg></div>
+          <h3>Maslahat</h3>
+          <p>Qaysi model sizga mosligini birga tanlaymiz.</p>
+        </div>
+        <div class="info reveal d3">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></div>
+          <h3>To'g'ridan-to'g'ri aloqa</h3>
+          <p>Do'kon egasiga bir bosishda qo'ng'iroq qiling.</p>
+        </div>
+      </div>
+      <h3 class="steps-title reveal">Buyurtma uchun uch qadam</h3>
+      <div class="steps">
+        <div class="step reveal"><b>1-qadam</b><span>Kerakli modelni tanlang</span></div>
+        <div class="step reveal d1"><b>2-qadam</b><span>Do'kon egasiga qo'ng'iroq qiling</span></div>
+        <div class="step reveal d2"><b>3-qadam</b><span>Narx va shartlarni kelishib oling</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= BOG'LANISH ======= -->
+  <section class="sec dark" id="boglanish">
+    <div class="wrap">
+      <div class="contact reveal">
+        <div class="owner"><i>T</i><span>Temurmalik · do'kon egasi</span></div>
+        <h2>Do'kon egasi bilan<br><span class="grad">bog'laning</span></h2>
+        <p class="lead">Narx, mavjud ranglar va modellar haqida to'g'ridan-to'g'ri so'rang.</p>
+        <a class="phone-big" href="tel:+998772675584" id="phoneText">+998 77 267 55 84</a>
+        <div class="cta-row">
+          <a class="btn primary" href="tel:+998772675584">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+            Qo'ng'iroq qilish</a>
+          <button class="btn ghost" type="button" id="copyBtn">Raqamni nusxalash</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p><b>Temurmalik Apple UZB</b> · © 2026. Apple, iPhone, MacBook va Apple Watch — Apple Inc. kompaniyasining savdo belgilari. Bu sayt do'konning o'z sahifasi, Apple rasmiy sayti emas.</p>
+    <a href="tel:+998772675584">+998 77 267 55 84</a>
+  </div>
+</footer>
+
+<a class="fab" href="tel:+998772675584" aria-label="Qo'ng'iroq qilish">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+</a>
+
+<!-- ======= "HAMMASINI KO'RISH" OYNASI ======= -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-bar">
+    <div class="wrap">
+      <h3 id="sheetTitle">Boshqa modellar</h3>
+      <button class="close" id="sheetClose" type="button" aria-label="Yopish">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="wrap"><div class="grid sheet-in" id="sheetGrid"></div></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  document.documentElement.classList.add("js");
+
+  var TEL = "tel:+998772675584";
+  var APPLE = "M15.6 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.9-.8-3.1-.8-1.6 0-3.1.9-3.9 2.3-1.7 2.9-.4 7.2 1.2 9.6.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.7 1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7 0 0-2.5-1-2.8-4zM13.3 5.6c.7-.8 1.1-1.9 1-3-.9 0-2.1.6-2.8 1.4-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.5 2.8-1.3z";
+  document.querySelectorAll(".apple-d").forEach(function(p){ p.setAttribute("d", APPLE); });
+
+  /* ================= QURILMA RASMLARI (SVG) ================= */
+  var UID = 0;
+  function uid(p){ UID += 1; return p + UID; }
+
+  function lens(cx, cy, r){
+    var g = uid("lg");
+    return '<defs><radialGradient id="'+g+'" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#46587f"/><stop offset=".45" stop-color="#10131c"/><stop offset="1" stop-color="#000"/></radialGradient></defs>'+
+      '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="#17181c" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>'+
+      '<circle cx="'+cx+'" cy="'+cy+'" r="'+(r*0.72)+'" fill="url(#'+g+')"/>'+
+      '<circle cx="'+(cx-r*0.24)+'" cy="'+(cy-r*0.26)+'" r="'+(r*0.15)+'" fill="rgba(255,255,255,.4)"/>';
+  }
+
+  function phoneFront(p){
+    var f = uid("pf"), w = uid("pw"), s = uid("ps");
+    return '<defs>'+
+      '<linearGradient id="'+f+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.frame[0]+'"/><stop offset=".5" stop-color="'+p.frame[1]+'"/><stop offset="1" stop-color="'+p.frame[0]+'"/></linearGradient>'+
+      '<linearGradient id="'+w+'" x1=".1" y1="0" x2=".9" y2="1"><stop offset="0" stop-color="'+p.wp[0]+'"/><stop offset=".55" stop-color="'+p.wp[1]+'"/><stop offset="1" stop-color="'+p.wp[2]+'"/></linearGradient>'+
+      '<radialGradient id="'+s+'" cx="25%" cy="10%" r="85%"><stop offset="0" stop-color="#fff" stop-opacity=".38"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'+
+      '</defs>'+
+      '<rect x="-3" y="88" width="4" height="22" rx="2" fill="'+p.frame[1]+'"/>'+
+      '<rect x="-3" y="128" width="4" height="40" rx="2" fill="'+p.frame[1]+'"/>'+
+      '<rect x="-3" y="178" width="4" height="40" rx="2" fill="'+p.frame[1]+'"/>'+
+      '<rect x="199" y="150" width="4" height="62" rx="2" fill="'+p.frame[1]+'"/>'+
+      '<rect width="200" height="420" rx="46" fill="url(#'+f+')"/>'+
+      '<rect x="3" y="3" width="194" height="414" rx="43" fill="#050506"/>'+
+      '<rect x="8" y="8" width="184" height="404" rx="38" fill="url(#'+w+')"/>'+
+      '<rect x="8" y="8" width="184" height="404" rx="38" fill="url(#'+s+')"/>'+
+      '<rect x="70" y="19" width="60" height="18" rx="9" fill="#000"/>'+
+      '<text class="svt" x="100" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="rgba(255,255,255,.85)">Seshanba, 17-noyabr</text>'+
+      '<text class="svt" x="100" y="132" text-anchor="middle" font-size="52" font-weight="700" fill="#fff">9:41</text>'+
+      '<rect x="22" y="330" width="75" height="62" rx="18" fill="rgba(255,255,255,.2)"/>'+
+      '<rect x="103" y="330" width="75" height="62" rx="18" fill="rgba(255,255,255,.14)"/>'+
+      '<rect x="72" y="402" width="56" height="4" rx="2" fill="rgba(255,255,255,.85)"/>';
+  }
+
+  function phoneBack(p){
+    var f = uid("bf"), b = uid("bb"), sh = uid("bs");
+    var cam = "";
+    if(p.kind === "pro"){
+      cam = '<rect x="14" y="14" width="94" height="104" rx="27" fill="'+p.plate+'" stroke="rgba(255,255,255,.18)"/>'+
+        lens(44,48,15)+lens(44,88,15)+lens(82,68,15)+
+        '<circle cx="86" cy="34" r="4.5" fill="#fff6d6"/><circle cx="88" cy="102" r="3.5" fill="#15151a"/>';
+    } else if(p.kind === "air"){
+      cam = '<rect x="12" y="16" width="176" height="56" rx="26" fill="'+p.plate+'" stroke="rgba(255,255,255,.18)"/>'+
+        lens(46,44,15)+'<circle cx="150" cy="38" r="4.5" fill="#fff6d6"/><circle cx="158" cy="54" r="3" fill="#15151a"/>';
+    } else {
+      cam = '<rect x="14" y="14" width="74" height="104" rx="26" fill="'+p.plate+'" stroke="rgba(255,255,255,.18)"/>'+
+        lens(40,46,14)+lens(40,88,14)+'<circle cx="72" cy="32" r="4" fill="#fff6d6"/>';
+    }
+    return '<defs>'+
+      '<linearGradient id="'+f+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.frame[0]+'"/><stop offset=".5" stop-color="'+p.frame[1]+'"/><stop offset="1" stop-color="'+p.frame[0]+'"/></linearGradient>'+
+      '<linearGradient id="'+b+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.back[0]+'"/><stop offset="1" stop-color="'+p.back[1]+'"/></linearGradient>'+
+      '<linearGradient id="'+sh+'" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset=".35" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient>'+
+      '</defs>'+
+      '<rect width="200" height="420" rx="46" fill="url(#'+f+')"/>'+
+      '<rect x="3" y="3" width="194" height="414" rx="43" fill="url(#'+b+')"/>'+
+      '<rect x="3" y="3" width="194" height="414" rx="43" fill="url(#'+sh+')"/>'+
+      cam+
+      '<g transform="translate(76 226) scale(2.1)" fill="rgba(255,255,255,.55)"><path d="'+APPLE+'"/></g>';
+  }
+
+  function phoneArt(p){
+    return '<svg viewBox="0 0 338 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+p.name+'">'+
+      '<g transform="translate(8 28) rotate(-8 100 210)">'+phoneBack(p)+'</g>'+
+      '<g transform="translate(122 14) rotate(5 100 210)">'+phoneFront(p)+'</g></svg>';
+  }
+
+  function phoneSingle(p){
+    return '<svg viewBox="-8 -4 216 428" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+phoneFront(p)+'</svg>';
+  }
+
+  function foldArt(p){
+    var f = uid("ff"), w = uid("fw"), h = uid("fh");
+    return '<svg viewBox="0 0 360 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+p.name+'">'+
+      '<defs>'+
+      '<linearGradient id="'+f+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.frame[0]+'"/><stop offset=".5" stop-color="'+p.frame[1]+'"/><stop offset="1" stop-color="'+p.frame[0]+'"/></linearGradient>'+
+      '<linearGradient id="'+w+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.wp[0]+'"/><stop offset=".55" stop-color="'+p.wp[1]+'"/><stop offset="1" stop-color="'+p.wp[2]+'"/></linearGradient>'+
+      '<linearGradient id="'+h+'" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".5" stop-color="#000" stop-opacity=".5"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>'+
+      '</defs>'+
+      '<rect x="6" y="26" width="348" height="392" rx="40" fill="url(#'+f+')"/>'+
+      '<rect x="10" y="30" width="340" height="384" rx="37" fill="#050506"/>'+
+      '<rect x="16" y="36" width="328" height="372" rx="31" fill="url(#'+w+')"/>'+
+      '<rect x="152" y="36" width="56" height="372" fill="url(#'+h+')"/>'+
+      '<rect x="178" y="36" width="4" height="372" fill="rgba(0,0,0,.6)"/>'+
+      '<circle cx="318" cy="56" r="6" fill="#000"/>'+
+      '<text class="svt" x="98" y="130" text-anchor="middle" font-size="13" font-weight="600" fill="rgba(255,255,255,.85)">Seshanba, 17-noyabr</text>'+
+      '<text class="svt" x="98" y="190" text-anchor="middle" font-size="56" font-weight="700" fill="#fff">9:41</text>'+
+      '<rect x="32" y="300" width="132" height="84" rx="20" fill="rgba(255,255,255,.2)"/>'+
+      '<rect x="196" y="96" width="132" height="132" rx="24" fill="rgba(255,255,255,.18)"/>'+
+      '<rect x="196" y="244" width="132" height="62" rx="20" fill="rgba(255,255,255,.14)"/>'+
+      '<rect x="196" y="322" width="132" height="62" rx="20" fill="rgba(255,255,255,.2)"/>'+
+      '<rect x="349" y="150" width="4" height="62" rx="2" fill="'+p.frame[1]+'"/>'+
+      '</svg>';
+  }
+
+  function macArt(p){
+    var m = uid("mm"), w = uid("mw"), bs = uid("mb");
+    return '<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+p.name+'">'+
+      '<defs>'+
+      '<linearGradient id="'+m+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.metal[0]+'"/><stop offset="1" stop-color="'+p.metal[1]+'"/></linearGradient>'+
+      '<linearGradient id="'+bs+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+p.metal[0]+'"/><stop offset="1" stop-color="'+p.metal[1]+'"/></linearGradient>'+
+      '<linearGradient id="'+w+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.wp[0]+'"/><stop offset=".5" stop-color="'+p.wp[1]+'"/><stop offset="1" stop-color="'+p.wp[2]+'"/></linearGradient>'+
+      '</defs>'+
+      '<rect x="52" y="8" width="296" height="194" rx="13" fill="url(#'+m+')"/>'+
+      '<rect x="57" y="13" width="286" height="184" rx="9" fill="#050506"/>'+
+      '<rect x="61" y="17" width="278" height="176" rx="6" fill="url(#'+w+')"/>'+
+      '<path d="M61 150 C120 120 170 180 240 150 S320 120 339 140 V187 a6 6 0 0 1 -6 6 H67 a6 6 0 0 1 -6 -6 Z" fill="rgba(255,255,255,.14)"/>'+
+      '<rect x="61" y="17" width="278" height="12" fill="rgba(0,0,0,.28)"/>'+
+      '<rect x="182" y="13" width="36" height="12" rx="6" fill="#050506"/>'+
+      '<rect x="68" y="21" width="22" height="4" rx="2" fill="rgba(255,255,255,.7)"/><rect x="310" y="21" width="22" height="4" rx="2" fill="rgba(255,255,255,.7)"/>'+
+      '<rect x="146" y="172" width="108" height="16" rx="8" fill="rgba(255,255,255,.3)"/>'+
+      '<circle cx="162" cy="180" r="4" fill="rgba(255,255,255,.8)"/><circle cx="180" cy="180" r="4" fill="rgba(255,255,255,.8)"/><circle cx="198" cy="180" r="4" fill="rgba(255,255,255,.8)"/><circle cx="216" cy="180" r="4" fill="rgba(255,255,255,.8)"/><circle cx="234" cy="180" r="4" fill="rgba(255,255,255,.8)"/>'+
+      '<path d="M18 202 H382 L378 218 Q377 226 368 226 H32 Q23 226 22 218 Z" fill="url(#'+bs+')"/>'+
+      '<rect x="162" y="202" width="76" height="6" rx="3" fill="rgba(0,0,0,.25)"/>'+
+      '</svg>';
+  }
+
+  function imacArt(p){
+    var m = uid("im"), w = uid("iw");
+    return '<svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+p.name+'">'+
+      '<defs>'+
+      '<linearGradient id="'+m+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.metal[0]+'"/><stop offset="1" stop-color="'+p.metal[1]+'"/></linearGradient>'+
+      '<linearGradient id="'+w+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.wp[0]+'"/><stop offset=".5" stop-color="'+p.wp[1]+'"/><stop offset="1" stop-color="'+p.wp[2]+'"/></linearGradient>'+
+      '</defs>'+
+      '<path d="M172 222 H228 L238 296 H162 Z" fill="url(#'+m+')"/>'+
+      '<rect x="120" y="290" width="160" height="14" rx="7" fill="url(#'+m+')"/>'+
+      '<rect x="24" y="10" width="352" height="218" rx="16" fill="url(#'+m+')"/>'+
+      '<rect x="34" y="20" width="332" height="170" rx="6" fill="#050506"/>'+
+      '<rect x="37" y="23" width="326" height="164" rx="4" fill="url(#'+w+')"/>'+
+      '<path d="M37 150 C100 120 160 180 230 148 S330 120 363 140 V183 a4 4 0 0 1 -4 4 H41 a4 4 0 0 1 -4 -4 Z" fill="rgba(255,255,255,.15)"/>'+
+      '<g transform="translate(181 198) scale(1.5)" fill="rgba(255,255,255,.75)"><path d="'+APPLE+'"/></g>'+
+      '</svg>';
+  }
+
+  function deskArt(p){
+    var m = uid("dm"), t = uid("dt"), top = 110, h = p.tall ? 112 : 62;
+    return '<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+p.name+'">'+
+      '<defs>'+
+      '<linearGradient id="'+m+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+p.metal[0]+'"/><stop offset="1" stop-color="'+p.metal[1]+'"/></linearGradient>'+
+      '<linearGradient id="'+t+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="'+p.metal[0]+'"/></linearGradient>'+
+      '</defs>'+
+      '<path d="M58 '+(top+36)+' L98 '+(top+8)+' H302 L342 '+(top+36)+' Z" fill="url(#'+t+')"/>'+
+      '<rect x="58" y="'+(top+36)+'" width="284" height="'+h+'" rx="16" fill="url(#'+m+')"/>'+
+      '<circle cx="200" cy="'+(top+36+h-16)+'" r="2.6" fill="rgba(255,255,255,.9)"/>'+
+      '<circle cx="86" cy="'+(top+36+16)+'" r="3" fill="rgba(0,0,0,.35)"/><circle cx="102" cy="'+(top+36+16)+'" r="3" fill="rgba(0,0,0,.35)"/><circle cx="118" cy="'+(top+36+16)+'" r="3" fill="rgba(0,0,0,.35)"/>'+
+      '<g transform="translate(284 '+(top+36+h/2-12)+') scale(1)" fill="rgba(0,0,0,.2)"><rect width="34" height="6" rx="3"/></g>'+
+      '</svg>';
+  }
+
+  function watchArt(p){
+    var c = uid("wc"), b = uid("wb"), bandStripes = "", holes = "", i;
+    if(p.kind === "ultra"){
+      for(i = 0; i < 10; i++){ bandStripes += '<rect x="64" y="'+(14+i*10)+'" width="92" height="2" fill="rgba(255,255,255,.28)"/>'; }
+      for(i = 0; i < 10; i++){ bandStripes += '<rect x="64" y="'+(272+i*10)+'" width="92" height="2" fill="rgba(255,255,255,.28)"/>'; }
+    } else {
+      for(i = 0; i < 5; i++){ holes += '<circle cx="110" cy="'+(292+i*16)+'" r="3.2" fill="rgba(0,0,0,.28)"/>'; }
+    }
+    var ringA = p.kind === "ultra" ? "#ff9f0a" : "#fa114f", ringB = p.kind === "ultra" ? "#ffd60a" : "#a6ff00", ringC = p.kind === "ultra" ? "#ff6a00" : "#00e0ff";
+    var side = p.kind === "ultra" ? '<rect x="28" y="168" width="8" height="46" rx="3" fill="#ff6a00"/>' : '';
+    var rad = p.kind === "ultra" ? 40 : 48;
+    return '<svg viewBox="0 0 220 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+p.name+'">'+
+      '<defs>'+
+      '<linearGradient id="'+c+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+p.cas[0]+'"/><stop offset="1" stop-color="'+p.cas[1]+'"/></linearGradient>'+
+      '<linearGradient id="'+b+'" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="'+p.band[0]+'"/><stop offset=".5" stop-color="'+p.band[1]+'"/><stop offset="1" stop-color="'+p.band[0]+'"/></linearGradient>'+
+      '</defs>'+
+      '<path d="M66 0 H154 L162 122 H58 Z" fill="url(#'+b+')"/>'+
+      '<path d="M58 258 H162 L154 380 H66 Z" fill="url(#'+b+')"/>'+
+      bandStripes+holes+
+      '<rect x="184" y="140" width="14" height="40" rx="5" fill="'+p.cas[1]+'"/>'+
+      '<rect x="184" y="198" width="7" height="28" rx="3" fill="'+p.cas[1]+'"/>'+
+      side+
+      '<rect x="34" y="96" width="152" height="188" rx="'+rad+'" fill="url(#'+c+')"/>'+
+      '<rect x="42" y="104" width="136" height="172" rx="'+(rad-8)+'" fill="#000"/>'+
+      '<text class="svt" x="110" y="158" text-anchor="middle" font-size="12" font-weight="600" fill="rgba(255,255,255,.7)">SESH 17</text>'+
+      '<text class="svt" x="110" y="196" text-anchor="middle" font-size="40" font-weight="700" fill="#fff">10:09</text>'+
+      '<g transform="translate(110 238) rotate(-90)" fill="none" stroke-width="6" stroke-linecap="round">'+
+      '<circle r="26" stroke="'+ringA+'" stroke-opacity=".28"/><circle r="26" stroke="'+ringA+'" stroke-dasharray="120 200"/>'+
+      '<circle r="18" stroke="'+ringB+'" stroke-opacity=".28"/><circle r="18" stroke="'+ringB+'" stroke-dasharray="80 200"/>'+
+      '<circle r="10" stroke="'+ringC+'" stroke-opacity=".28"/><circle r="10" stroke="'+ringC+'" stroke-dasharray="48 200"/>'+
+      '</g></svg>';
+  }
+
+  function artFor(it){
+    if(it.type === "phone") return phoneArt(it);
+    if(it.type === "fold") return foldArt(it);
+    if(it.type === "mac") return macArt(it);
+    if(it.type === "imac") return imacArt(it);
+    if(it.type === "desk") return deskArt(it);
+    return watchArt(it);
+  }
+
+  /* ================= MA'LUMOTLAR ================= */
+  var SILVER = ["#d9dadc","#8e9094"], DARK = ["#3a4256","#1c2130"];
+  var DATA = {
+    phones: {
+      title: "Boshqa iPhone modellari",
+      featured: [
+        {name:"iPhone 17 Pro Max", tag:"Eng katta ekran. Eng kuchli iPhone.", type:"phone", kind:"pro", frame:SILVER, back:["#ff9a57","#d2531a"], plate:"#b9461a", wp:["#ffb347","#e5532b","#3a1f6b"], glow:"rgba(255,125,50,.85)"},
+        {name:"iPhone 18 Pro Max", tag:"Yangi avlod iPhone.", badge:"Yangi", type:"phone", kind:"pro", frame:DARK, back:["#4a6cf0","#1b2a73"], plate:"#16205c", wp:["#4facfe","#6a3df0","#0b1030"], glow:"rgba(80,110,255,.85)"},
+        {name:"iPhone Duo", tag:"Ikki ekran. Bitta iPhone.", badge:"Yangi", type:"fold", frame:SILVER, wp:["#2fd1c5","#4f6bff","#a43cf0"], glow:"rgba(120,90,255,.85)"}
+      ],
+      more: [
+        {name:"iPhone 17 Pro", tag:"Pro imkoniyatlari ixcham o'lchamda.", type:"phone", kind:"pro", frame:SILVER, back:["#5b7fcb","#243c70"], plate:"#1c2d5c", wp:["#6fa8ff","#3b4bd8","#0e1236"], glow:"rgba(70,110,230,.8)"},
+        {name:"iPhone 17", tag:"Kundalik foydalanish uchun a'lo tanlov.", type:"phone", kind:"base", frame:["#cfd3cf","#8d928d"], back:["#bcd3ab","#7ea36e"], plate:"#6c9060", wp:["#a8e063","#2bb673","#0b3d2e"], glow:"rgba(110,190,100,.8)"},
+        {name:"iPhone Air", tag:"Yupqa va yengil.", type:"phone", kind:"air", frame:["#e6e0d0","#a79f8a"], back:["#f5ead0","#d8c391"], plate:"#c7b27a", wp:["#ffe29f","#ffa99f","#ff719a"], glow:"rgba(240,200,120,.85)"},
+        {name:"iPhone 16 Pro Max", tag:"Katta ekranli Pro.", type:"phone", kind:"pro", frame:["#cbbfae","#8a7b69"], back:["#cdbca7","#8f7c68"], plate:"#7b6a57", wp:["#f6d365","#fda085","#4a2c4f"], glow:"rgba(220,170,120,.8)"},
+        {name:"iPhone 16", tag:"Rang-barang va qulay.", type:"phone", kind:"base", frame:["#a9a7f5","#5f5bd6"], back:["#9a97f2","#5a56d6"], plate:"#4a46b8", wp:["#c3b1ff","#6a5cff","#1a1160"], glow:"rgba(120,110,240,.8)"},
+        {name:"iPhone 15", tag:"Sinovdan o'tgan ishonchli tanlov.", type:"phone", kind:"base", frame:["#e8d5da","#b88f9b"], back:["#f6d0d8","#dc93a6"], plate:"#c9788d", wp:["#ffc0cb","#ff8fab","#7b2d5a"], glow:"rgba(240,140,170,.8)"}
+      ]
+    },
+    macs: {
+      title: "Boshqa Mac modellari",
+      featured: [
+        {name:"MacBook Pro 16\"", tag:"Eng kuchli MacBook.", type:"mac", metal:["#3c3c42","#15151a"], wp:["#0a84ff","#5e5ce6","#ff375f"], glow:"rgba(90,100,255,.8)"},
+        {name:"MacBook Pro 14\"", tag:"Ixcham va kuchli.", type:"mac", metal:["#e8e9ec","#b4b6bb"], wp:["#30d158","#0a84ff","#5e5ce6"], glow:"rgba(60,170,230,.8)"},
+        {name:"MacBook Air 13\"", tag:"Yupqa, yengil, har kuni.", type:"mac", metal:["#d3dcea","#9fb2cc"], wp:["#ff9f0a","#ff375f","#bf5af2"], glow:"rgba(255,140,100,.8)"}
+      ],
+      more: [
+        {name:"MacBook Air 15\"", tag:"Katta ekranli yengil noutbuk.", type:"mac", metal:["#f1ebdf","#cfc3ad"], wp:["#64d2ff","#5e5ce6","#ff375f"], glow:"rgba(200,180,140,.85)"},
+        {name:"iMac 24\"", tag:"Hammasi bitta ekranda.", type:"imac", metal:["#8dbaff","#4f86e6"], wp:["#ffd60a","#ff9f0a","#ff375f"], glow:"rgba(90,150,255,.8)"},
+        {name:"Mac mini", tag:"Kichkina, lekin kuchli.", type:"desk", metal:["#d3d4d9","#8c8e95"], glow:"rgba(150,160,190,.8)"},
+        {name:"Mac Studio", tag:"Mutaxassislar uchun.", type:"desk", tall:true, metal:["#d3d4d9","#8c8e95"], glow:"rgba(150,160,190,.8)"}
+      ]
+    },
+    watches: {
+      title: "Boshqa Apple Watch modellari",
+      featured: [
+        {name:"Apple Watch Ultra 3", tag:"Eng bardoshli Apple Watch.", badge:"Yangi", type:"watch", kind:"ultra", cas:["#d5d6da","#7f8187"], band:["#ff8a1f","#e0600a"], glow:"rgba(255,140,40,.85)"},
+        {name:"Apple Watch Series 11", tag:"Har kuningiz uchun.", type:"watch", kind:"series", cas:["#dcdde0","#8e9096"], band:["#3b6cf6","#1f3fb0"], glow:"rgba(70,110,245,.85)"},
+        {name:"Apple Watch SE 3", tag:"Arzon narxda asosiy imkoniyatlar.", type:"watch", kind:"se", cas:["#f1e8d8","#c9bba0"], band:["#f3ead9","#d0c1a5"], glow:"rgba(230,210,170,.9)"}
+      ],
+      more: [
+        {name:"Apple Watch Series 10", tag:"Yupqa va yorqin ekranli.", type:"watch", kind:"series", cas:["#ecc9bd","#b88c7d"], band:["#f2d6cd","#d4a89a"], glow:"rgba(230,170,150,.85)"},
+        {name:"Apple Watch Ultra 2", tag:"Sarguzasht va sport uchun.", type:"watch", kind:"ultra", cas:["#b9babe","#6f7075"], band:["#f4f4f4","#cfcfd1"], glow:"rgba(180,185,200,.85)"},
+        {name:"Apple Watch SE 2", tag:"Oddiy va qulay.", type:"watch", kind:"se", cas:["#2f2f33","#0e0e10"], band:["#3a3a3f","#18181b"], glow:"rgba(110,110,130,.85)"},
+        {name:"Apple Watch Series 9", tag:"Sinovdan o'tgan tanlov.", type:"watch", kind:"series", cas:["#f2cad6","#b98a99"], band:["#f6d6df","#d99fb1"], glow:"rgba(240,150,180,.85)"}
+      ]
+    }
+  };
+
+  function cardHTML(it){
+    return '<article class="card" style="--glow:'+it.glow+'">'+
+      (it.badge ? '<span class="badge">'+it.badge+'</span>' : '')+
+      '<div class="art">'+artFor(it)+'</div>'+
+      '<h3>'+it.name+'</h3><p>'+it.tag+'</p>'+
+      '<a class="link" href="'+TEL+'">Narxini so\'rash <span aria-hidden="true">›</span></a></article>';
+  }
+  function fill(id, list){ document.getElementById(id).innerHTML = list.map(cardHTML).join(""); }
+  fill("grid-phones", DATA.phones.featured);
+  fill("grid-macs", DATA.macs.featured);
+  fill("grid-watches", DATA.watches.featured);
+
+  /* Hero qurilmalari */
+  document.getElementById("stage").innerHTML =
+    '<svg class="s-watch" viewBox="0 0 220 380">'+watchArt(DATA.watches.featured[0]).replace(/^<svg[^>]*>|<\/svg>$/g,"")+'</svg>'+
+    macArt(DATA.macs.featured[0]).replace("<svg ", '<svg class="s-mac" ')+
+    '<svg class="s-phone" viewBox="-8 -4 216 428">'+phoneFront(DATA.phones.featured[0]).replace(/^<svg[^>]*>|<\/svg>$/g,"")+'</svg>';
+
+  /* ================= KIRISH EFFEKTI ================= */
+  var intro = document.getElementById("intro");
+  var entered = false;
+  function enter(){
+    if(entered) return;
+    entered = true;
+    intro.classList.add("leaving");
+    document.body.classList.add("entered");
+    setTimeout(function(){
+      document.body.classList.remove("locked");
+      intro.style.display = "none";
+    }, 1500);
+  }
+  document.getElementById("enterBtn").addEventListener("click", enter);
+  document.getElementById("enterBtn").focus({preventScroll:true});
+
+  /* ================= NAVBAR ================= */
+  var nav = document.getElementById("nav"), burger = document.getElementById("burger");
+  burger.addEventListener("click", function(){
+    var open = nav.classList.toggle("open");
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  document.querySelectorAll("#links a").forEach(function(a){
+    a.addEventListener("click", function(){ nav.classList.remove("open"); burger.setAttribute("aria-expanded","false"); });
+  });
+  var spyLinks = Array.prototype.slice.call(document.querySelectorAll("#links a"));
+  var spyMap = {};
+  spyLinks.forEach(function(a){ spyMap[a.getAttribute("href").slice(1)] = a; });
+  if("IntersectionObserver" in window){
+    var spy = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          spyLinks.forEach(function(a){ a.classList.remove("active"); });
+          var a = spyMap[e.target.id]; if(a) a.classList.add("active");
+        }
+      });
+    }, {rootMargin:"-45% 0px -50% 0px"});
+    Object.keys(spyMap).forEach(function(id){ var el = document.getElementById(id); if(el) spy.observe(el); });
+
+    var rv = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); rv.unobserve(e.target); } });
+    }, {threshold:.12, rootMargin:"0px 0px -6% 0px"});
+    document.querySelectorAll(".reveal").forEach(function(el){ rv.observe(el); });
+  } else {
+    document.querySelectorAll(".reveal").forEach(function(el){ el.classList.add("in"); });
+  }
+
+  /* ================= KARTA EFFEKTLARI (qiya + yorug'lik) ================= */
+  document.addEventListener("pointermove", function(e){
+    if(e.pointerType === "touch") return;
+    var c = e.target.closest ? e.target.closest(".card") : null;
+    if(!c) return;
+    var r = c.getBoundingClientRect();
+    var x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    c.style.setProperty("--mx", (x*100)+"%"); c.style.setProperty("--my", (y*100)+"%");
+    var a = c.querySelector(".art");
+    a.style.setProperty("--ry", ((x-.5)*12)+"deg"); a.style.setProperty("--rx", (-(y-.5)*10)+"deg");
+  });
+  document.addEventListener("pointerout", function(e){
+    var c = e.target.closest ? e.target.closest(".card") : null;
+    if(c && !c.contains(e.relatedTarget)){
+      var a = c.querySelector(".art"); a.style.setProperty("--rx","0deg"); a.style.setProperty("--ry","0deg");
+    }
+  });
+
+  /* ================= "HAMMASINI KO'RISH" OYNASI ================= */
+  var sheet = document.getElementById("sheet"), sheetGrid = document.getElementById("sheetGrid"), lastOpener = null;
+  function openSheet(key, opener){
+    var d = DATA[key]; if(!d) return;
+    lastOpener = opener || null;
+    document.getElementById("sheetTitle").textContent = d.title;
+    sheetGrid.innerHTML = d.more.map(cardHTML).join("");
+    sheet.scrollTop = 0;
+    document.body.classList.add("locked");
+    requestAnimationFrame(function(){ sheet.classList.add("open"); });
+    document.getElementById("sheetClose").focus({preventScroll:true});
+  }
+  function closeSheet(){
+    sheet.classList.remove("open");
+    document.body.classList.remove("locked");
+    if(lastOpener) lastOpener.focus({preventScroll:true});
+  }
+  document.querySelectorAll("[data-open]").forEach(function(b){
+    b.addEventListener("click", function(){ openSheet(b.getAttribute("data-open"), b); });
+  });
+  document.getElementById("sheetClose").addEventListener("click", closeSheet);
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && sheet.classList.contains("open")) closeSheet();
+  });
+
+  /* ================= RAQAMNI NUSXALASH ================= */
+  var toast = document.getElementById("toast"), toastTimer;
+  function showToast(msg){
+    toast.textContent = msg; toast.classList.add("show");
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 2200);
+  }
+  document.getElementById("copyBtn").addEventListener("click", function(){
+    var num = "+998772675584";
+    function fallback(){
+      var t = document.createElement("textarea"); t.value = num; t.style.position = "fixed"; t.style.opacity = "0";
+      document.body.appendChild(t); t.select();
+      try{ document.execCommand("copy"); showToast("Raqam nusxalandi"); }catch(err){ showToast(num); }
+      document.body.removeChild(t);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(num).then(function(){ showToast("Raqam nusxalandi"); }, fallback);
+    } else { fallback(); }
+  });
+})();
+</script>
+</body>
+</html>
